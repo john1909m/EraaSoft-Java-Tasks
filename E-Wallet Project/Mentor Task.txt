@@ -1,0 +1,47 @@
+        //-------Mentor Task Google Drive-----////
+
+
+
+//        Thread t1 = new Thread(() -> {
+//            for (int i = 1; i <= 3; i++) {
+//                System.out.println("T1: " + i);
+//            }
+//        });
+//
+//        Thread t2 = new Thread(() -> {
+//            for (int i = 1; i <= 3; i++) {
+//                System.out.println("T2: " + i);
+//            }
+//        });
+//
+//        t1.start();
+//        t2.start();
+//        System.out.println("Main Done");
+
+        //==Possible order is not predictable bec any thread may be completed at any time
+        //==Main Thread: Calls t1.start() , Calls t2.start() , Print (Main Done)
+        //==Thread1: Print from 1 to 3
+        //==Thread2: Print from 1 to 3
+
+
+//class Person {
+//    String name;
+//    Person(String name) {
+//        this.name = name;
+//    }
+//}
+//
+//public class MemoryTest {
+//    public static void main(String[] args) {
+//        Person p1 = new Person("Alice");
+//        Person p2 = p1;
+//        changeName(p2);
+//        System.out.println(p1.name);
+//    }
+//
+//    static void changeName(Person person) {
+//        person.name = "Bob";
+//    }
+//}
+
+   //Output will be Bob Because p2 refers to location of the reference of p1 so when changing p2 then the same change happen in p1
