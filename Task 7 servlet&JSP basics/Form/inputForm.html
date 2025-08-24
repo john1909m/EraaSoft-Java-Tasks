@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Styled Form</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    form {
+        background: #ffffff;
+        padding: 25px 35px;
+        border-radius: 12px;
+        box-shadow: 0px 6px 15px rgba(0,0,0,0.1);
+        width: 350px;
+    }
+
+    form h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    label {
+        font-weight: bold;
+        color: #444;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 14px;
+        outline: none;
+        transition: border 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+        border: 1px solid #4facfe;
+        box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+    }
+
+    /* Radio buttons inline */
+    .radio-group {
+        display: flex;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .radio-group label {
+        font-weight: normal;
+        cursor: pointer;
+    }
+
+    /* Button */
+    button {
+        width: 100%;
+        padding: 12px;
+        background:indigo;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    button:hover {
+        transform: scale(1.03);
+    }
+</style>
+</head>
+<body>
+    <form action="showFormData.jsp" method="post">
+        <div>
+            <label>Full Name</label>
+            <input type="text" name="full_name" class="full_name" placeholder="Please enter your full name">
+            
+            <label>Password</label>
+            <input type="password" name="password" class="password" placeholder="Please enter your password">
+        </div>
+
+        <div>
+            <h3>Address</h3>
+            <div class="radio-group">
+                <input type="radio" name="radio_address" id="Cairo" value="Cairo">
+                <label for="Cairo">Cairo</label>
+
+                <input type="radio" name="radio_address" id="Alex" value="Alex">
+                <label for="Alex">Alex</label>
+
+                <input type="radio" name="radio_address" id="Menofia" value="Menofia">
+                <label for="Menofia">Menofia</label>
+            </div>
+        </div>
+
+        <div>
+            <h3>Select your Country</h3>
+            <select name="country" id="country">
+                <option value="cairo">Cairo</option>
+                <option value="alex">Alexandria</option>
+                <option value="menofia">Menofia</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</body>
+</html>

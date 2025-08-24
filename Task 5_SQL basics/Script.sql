@@ -23,7 +23,7 @@ CREATE TABLE Manager(
 			id NUMBER(3),
 			name VARCHAR(50),
 			age NUMBER(2),
-			bith_date DATE,
+			bith_date DATE,,
 			address VARCHAR(70)
 );
 ALTER TABLE MANAGER DROP COLUMN ADDRESS;
