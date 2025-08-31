@@ -1,0 +1,93 @@
+@charset "UTF-8";
+/* General page style */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+/* Container */
+.layer {
+    width: 90%;
+    max-width: 1000px;
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.layer h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    background: #007bff;
+    color: #fff;
+}
+
+th, td {
+    text-align: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #f1f7ff;
+    transition: background 0.2s;
+}
+
+/* Action links */
+td a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+td a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Add Item button */
+button.f {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button.f a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+button.f:hover {
+    background: #0056b3;
+}
