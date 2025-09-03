@@ -1,0 +1,180 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Item</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-hover: #1e40af;
+      --ring: rgba(37, 99, 235, 0.25);
+      --success: #16a34a;
+      --danger: #dc2626;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), #e9eef5);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid #eef2f7;
+      animation: floatIn .5s ease both;
+    }
+
+    @keyframes floatIn {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .header {
+      padding: 22px 24px;
+      border-bottom: 1px solid #eef2f7;
+      background: #fafcff;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    form {
+      padding: 20px 24px 26px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .field { display: grid; gap: 8px; }
+
+    label {
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      background: #fff;
+    }
+
+    input::placeholder { color: #9ca3af; }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .05s ease, background .2s ease;
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .hint {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .inline {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .error { color: var(--danger); font-size: .9rem; display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Add New Item</h1>
+      <p class="subtitle">Enter the item details, then click Add.</p>
+    </div>
+    <form action="/Item_Shop/ItemController?action=addItem" method="post">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="e.g., Wireless Mouse" required minlength="2" maxlength="60" />
+        <span class="hint">2–60 characters.</span>
+        <div class="error" id="nameErr">Please enter a valid name (min 2 characters).</div>
+      </div>
+
+      <div class="inline">
+        <div class="field">
+          <label for="price">Price</label>
+          <input id="price" name="price" type="number" step="0.01" min="0" placeholder="e.g., 149.99" required />
+          <div class="error" id="priceErr">Please enter a valid price (≥ 0).</div>
+        </div>
+
+        <div class="field">
+          <label for="totalNumber">Total Number</label>
+          <input id="totalNumber" name="totalNumber" type="number" min="0" step="1" placeholder="e.g., 10" required />
+          <div class="error" id="qtyErr">Please enter a valid quantity (integer ≥ 0).</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Add</button>
+      </div>
+    </form>
+  </div>
+
+ 
+</body>
+</html>

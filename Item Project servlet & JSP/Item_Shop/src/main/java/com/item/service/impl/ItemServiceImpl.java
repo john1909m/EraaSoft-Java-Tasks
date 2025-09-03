@@ -25,9 +25,9 @@ public class ItemServiceImpl implements ItemService{
 		try {
 			connection=dataSource.getConnection();
 			statement=connection.createStatement();
-			String sql="INSERT INTO item (name,price,total_number) VALUES ('"
+			String sql="INSERT INTO ITEM (name,price,total_number) VALUES ('"
 			        +item.getName()+"', "
-			        +item.getPrice()+"', "
+			        +item.getPrice()+", "
 			        +item.getTotalNumber()+")";
 			statement.execute(sql);
 			return true;
@@ -51,8 +51,8 @@ public class ItemServiceImpl implements ItemService{
 		try {
 			connection=dataSource.getConnection();
 			statement=connection.createStatement();
-			String sql="Delete FROM item WHERE id= "+id;
-			statement.equals(sql);
+			String sql="Delete FROM ITEM WHERE id= "+id;
+			statement.execute(sql);
 			return true;
 		}  catch (Exception e) {
 			System.out.println("--------> " + e.getMessage());
@@ -74,8 +74,8 @@ public class ItemServiceImpl implements ItemService{
 		try {
 			connection=dataSource.getConnection();
 			statement=connection.createStatement();
-			String sql="UPDATE item SET NAME='"+item.getName()+"', "
-					+"PRICE="+item.getPrice()
+			String sql="UPDATE ITEM SET NAME='"+item.getName()+"', "
+					+"PRICE="+item.getPrice()+","
 					+"TOTAL_NUMBER="+item.getTotalNumber()
 					+" WHERE id= "+item.getId();
 			statement.execute(sql);
@@ -94,13 +94,13 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public Item getItem(int id) {
+	public Item getItem(Long id) {
 		Connection connection=null;
 		Statement statement=null;
 		try {
 			connection=dataSource.getConnection();
 			statement=connection.createStatement();
-			String sql="SELECT * FROM item WHERE id="+id;
+			String sql="SELECT * FROM ITEM WHERE id="+id;
 			ResultSet resultSet=statement.executeQuery(sql);
 			Item item=new Item();
 			if(resultSet.next()) {
@@ -130,7 +130,7 @@ public class ItemServiceImpl implements ItemService{
 		try {
 			connection=dataSource.getConnection();
 			statement=connection.createStatement();
-			String sql="SELECT * FROM item ORDER BY id";
+			String sql="SELECT * FROM ITEM ORDER BY id";
 			ResultSet resultSet=statement.executeQuery(sql);
 			List<Item> items=new ArrayList<>();
 			

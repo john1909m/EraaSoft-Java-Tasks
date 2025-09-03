@@ -1,5 +1,5 @@
-@charset "UTF-8";
-/* General page style */
+/*@charset "UTF-8";
+ General page style 
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #f4f6f8;
@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
 }
 
-/* Container */
+
 .layer {
     width: 90%;
     max-width: 1000px;
@@ -22,7 +22,7 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Heading */
+
 .layer h1 {
     text-align: center;
     color: #333;
@@ -32,7 +32,7 @@ body {
     padding-bottom: 10px;
 }
 
-/* Table */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -56,7 +56,7 @@ tbody tr:hover {
     transition: background 0.2s;
 }
 
-/* Action links */
+
 td a {
     margin: 0 5px;
     text-decoration: none;
@@ -70,7 +70,7 @@ td a:hover {
     text-decoration: underline;
 }
 
-/* Add Item button */
+
 button.f {
     display: block;
     margin: 0 auto;
@@ -91,3 +91,4 @@ button.f a {
 button.f:hover {
     background: #0056b3;
 }
+*/

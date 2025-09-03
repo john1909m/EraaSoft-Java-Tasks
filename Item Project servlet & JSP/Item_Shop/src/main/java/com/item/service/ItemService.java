@@ -8,7 +8,7 @@ public interface ItemService {
 	boolean addItem(Item item);
 	boolean removeItem(Long id);
 	boolean editItem(Item item);
-	Item getItem(int id);
+	Item getItem(Long id);
 	List<Item> getItems();
 	
 }

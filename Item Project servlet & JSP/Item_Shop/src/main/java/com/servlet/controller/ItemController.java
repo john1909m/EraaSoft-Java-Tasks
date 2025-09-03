@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +31,7 @@ public class ItemController extends HttpServlet {
 
 	@Resource(name = "jdbc/item")
 	private DataSource dataSource;
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action =request.getParameter("action");
 		if(Objects.isNull(action)) {
@@ -74,9 +76,28 @@ public class ItemController extends HttpServlet {
 		}
 	}
 	private void getItem(HttpServletRequest request, HttpServletResponse response){
-		Long id=Long.parseLong(request.getParameter("id"));
-		ItemService itemService=new ItemServiceImpl(dataSource);
-		Item thisItem=itemService.getItem(id);
+
+		  try {
+		        Long id = Long.parseLong(request.getParameter("id")); 
+		        ItemService itemService = new ItemServiceImpl(dataSource);
+		        Item thisItem = itemService.getItem(id);
+
+		        if (thisItem != null) {
+		            List<Item> items = new ArrayList<>();
+		            items.add(thisItem);
+		            request.setAttribute("allItems", items);
+		        } else {
+		            request.setAttribute("allItems", new ArrayList<Item>());
+		        }
+
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("ShowItemsAll/ShowItems.jsp");
+		        dispatcher.forward(request, response);
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+			
+		
 	}
 	private void addItem(HttpServletRequest request, HttpServletResponse response){
 		String name=request.getParameter("name");
@@ -85,6 +106,7 @@ public class ItemController extends HttpServlet {
 		Item item =new Item(name,price,totalNumber);
 		ItemService itemService=new ItemServiceImpl(dataSource);
 		boolean isItemAdded=itemService.addItem(item);
+		getItems(request, response);
 		
 	}
 	private void editItem(HttpServletRequest request, HttpServletResponse response){
@@ -95,11 +117,13 @@ public class ItemController extends HttpServlet {
 		Item item =new Item(id,name,price,totalNumber);
 		ItemService itemService=new ItemServiceImpl(dataSource);
 		boolean isItemEdited=itemService.editItem(item);
+		getItems(request,response);
 	}
 	private void removeItem(HttpServletRequest request, HttpServletResponse response){
 		Long id=Long.parseLong(request.getParameter("id"));
 		ItemService itemService=new ItemServiceImpl(dataSource);
 		boolean isItemRemoved=itemService.removeItem(id);
+		getItems(request, response);
 	}
 
 	
