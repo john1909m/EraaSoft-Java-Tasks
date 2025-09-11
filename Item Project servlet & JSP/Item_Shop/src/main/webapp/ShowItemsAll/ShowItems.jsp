@@ -188,7 +188,10 @@ form input[type="submit"]:hover {
                        <td><%= item.getPrice() %></td>
                        <td><%= item.getTotalNumber() %></td>
                        <td>
-                           <a href="./EditItem.jsp?id=<%= item.getId()%>&name=<%= item.getName()%>&price=<%= item.getPrice()%>&totalNumber=<%= item.getTotalNumber()%>">Update</a>
+                       <%
+    					session.setAttribute("item_" + item.getId(), item);
+						%>
+                           <a href="./EditItem.jsp?id=<%= item.getId()%>">Update</a>
                            <a href="/Item_Shop/ItemController?action=removeItem&id=<%= item.getId() %>">Delete</a>
                        </td>
                    </tr>
@@ -199,7 +202,7 @@ form input[type="submit"]:hover {
         </tbody>
     </table>
 
-    <button class="f"><a href="./addItem.jsp">Add Item</a></button>
+    <button class="f"><a href="./addItem.html">Add Item</a></button>
 </div>
 </body>
 </html>

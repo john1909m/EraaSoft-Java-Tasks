@@ -1,3 +1,4 @@
+<%@page import="com.servlet.model.Item"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -63,6 +64,10 @@
     }
   </style>
 </head>
+<%
+	String id =request.getParameter("id");
+	Item item =(Item) session.getAttribute("item_"+id);
+%>
 <body>
 
   <div class="form-container">
@@ -70,13 +75,13 @@
     <form action="/Item_Shop/ItemController?action=editItem" method="post">
       <input type="hidden" name="id" value="<%= request.getParameter("id") %>">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name" value="<%= request.getParameter("name") %>" required>
+      <input type="text" id="name" name="name" value="<%= item.getName() %>" required>
 
       <label for="price">Price</label>
-      <input type="number" id="price" name="price" step="0.01" value="<%= request.getParameter("price") %>" required>
+      <input type="number" id="price" name="price" step="0.01" value="<%= item.getPrice() %>" required>
 
       <label for="totalNumber">Total Number</label>
-      <input type="number" id="totalNumber" name="totalNumber" value="<%= request.getParameter("totalNumber") %>" required>
+      <input type="number" id="totalNumber" name="totalNumber" value="<%= item.getTotalNumber() %>" required>
 
       <button type="submit">Update Item</button>
     </form>
