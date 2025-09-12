@@ -1,6 +1,9 @@
 package com.servlet.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -53,7 +56,7 @@ public class userController extends HttpServlet {
 	}
 
 	private void showlogin(HttpServletRequest request, HttpServletResponse response) {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
         try {
 			dispatcher.forward(request, response);
 		} catch (ServletException e) {
@@ -67,7 +70,7 @@ public class userController extends HttpServlet {
 	}
 
 	private void showRegister(HttpServletRequest request, HttpServletResponse response) {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("Register.html");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
         try {
 			dispatcher.forward(request, response);
 		} catch (ServletException e) {
@@ -79,13 +82,49 @@ public class userController extends HttpServlet {
 		}
 		
 	}
-
+	public boolean emailExists(String email) {
+		String sql = "SELECT * FROM USERS WHERE EMAIL = ?";
+		Connection connection=null;
+		try {
+			connection=dataSource.getConnection();
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ps.setString(1, email);
+			try {
+				ResultSet rs=ps.executeQuery();
+				return rs.next();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
+	}
 	private void register(HttpServletRequest request, HttpServletResponse response) {
 		String fName=request.getParameter("first_name");
+		if(fName==null || fName.isEmpty()) {
+			request.setAttribute("fNameError", "First name is required");
+		}
 		String lName=request.getParameter("last_name");
+		if(lName==null || lName.isEmpty()) {
+			request.setAttribute("lNameError", "Last name is required");
+		}
 		String phone=request.getParameter("phone_number");
+		if(phone==null || phone.isEmpty()) {
+			request.setAttribute("phoneError", "Phone number is required");
+		}
 		String email=request.getParameter("email");
+		if(email==null || email.isEmpty()) {
+			request.setAttribute("emailError", "Email is required");
+		}
+		if(emailExists(email)) {
+			request.setAttribute("emailExist", "Email is already registerd");
+
+		}
 		String password=request.getParameter("password");
+		if(password==null || password.isEmpty()) {
+			request.setAttribute("passwordError", "Password is required");
+		}
 		User user=new User(fName,lName,phone,email,password);
 		userService userService=new userServiceImpl(dataSource);
 		boolean isUserRegisterd=userService.register(user);
@@ -124,7 +163,7 @@ public class userController extends HttpServlet {
 				e.printStackTrace();
 			}
 		}else {
-			request.setAttribute("error", "Registration failed. Please try again.");
+			request.setAttribute("error", "Email or password is incorrect");
 		    try {
 				showlogin(request, response);
 			} catch (Exception e) {

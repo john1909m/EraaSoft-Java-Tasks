@@ -1,3 +1,6 @@
+<%@page import="com.item.service.userService"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,11 +80,17 @@
       margin-top: 10px;
       color: #666;
     }
+    .error{
+    	color:red;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Login</h2>
+    <%if(request.getAttribute("error")!=null){ %>
+    <p class="error"><%=request.getAttribute("error") %>
+    <% } %>
     <form action="/Item_Shop/userController?action=login" method="post">
       <div class="form-group">
         <label for="email">Email Address</label>
@@ -91,10 +100,11 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required minlength="6" maxlength="255">
+        
       </div>
 
       <button type="submit">Login</button>
-      <p class="note">Don't have an account? <a href="./Register.html">Register</a></p>
+      <p class="note">Don't have an account? <a href="./Register.jsp">Register</a></p>
     </form>
   </div>
 </body>

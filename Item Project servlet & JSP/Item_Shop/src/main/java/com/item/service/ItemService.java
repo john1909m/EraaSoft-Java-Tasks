@@ -10,5 +10,9 @@ public interface ItemService {
 	boolean editItem(Item item);
 	Item getItem(Long id);
 	List<Item> getItems();
+	boolean saveDetails(Item item);
+	boolean editDetails(Item item);
+	String showDetails(Long id);
+	boolean removeDetails(Long id);	
 	
 }

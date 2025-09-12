@@ -152,7 +152,39 @@ form input[type="submit"] {
 form input[type="submit"]:hover {
   background: #0056b3;
 }
-
+.action_btn{
+		  display:inline-block; 
+          padding:8px 16px; 
+          color:#fff; 
+          font-weight:bold; 
+          border-radius:6px; 
+          text-decoration:none; 
+          border:none;
+          transition:all 0.3s ease;
+}
+.action_btn:hover{
+	filter:brightness(0.8);
+	cursor:pointer;
+}
+.update{
+	background-color:#00EF38;
+	color:black;
+}
+.add{
+		background-color:#3B00EF;
+	
+}
+.delete{
+	background-color:#FF0000;
+}
+.update_details{
+	background-color:#00B500;
+	color:black;
+}
+.delete_details{
+		background-color:#A04B00;
+	
+}
     	
     </style>
 </head>
@@ -191,8 +223,23 @@ form input[type="submit"]:hover {
                        <%
     					session.setAttribute("item_" + item.getId(), item);
 						%>
-                           <a href="./EditItem.jsp?id=<%= item.getId()%>">Update</a>
-                           <a href="/Item_Shop/ItemController?action=removeItem&id=<%= item.getId() %>">Delete</a>
+                           <a href="./EditItem.jsp?id=<%= item.getId()%>"><button class="action_btn update">Update</button></a>
+
+							<a href="ItemDetails.jsp"><button class="action_btn add">Add Details</button></a>
+							<a href="/Item_Shop/ItemController?action=showDetails&item_id=<%= item.getId() %>"><button class="action_btn update_details">Update Details</button></a>
+							<a href="/Item_Shop/ItemController?action=removeDetails&id=<%= item.getId() %>"><button class="action_btn delete_details">Delete Details</button></a>
+
+							<div style="margin-top:10px; display:flex; flex-direction:column; align-items:center;">
+ 						   <a href="/Item_Shop/ItemController?action=removeItem&id=<%= item.getId() %>"><button class="action_btn delete">Delete</button></a>
+						    <%
+						    Long removeErrorId = (Long) request.getAttribute("itemRemoved");
+						        if (removeErrorId != null && removeErrorId.equals(item.getId())) {
+						    %>
+						        <p style="color:red; margin-top:5px;">remove details first</p>
+						    <%
+						        }
+						    %>
+						</div>
                        </td>
                    </tr>
         <%     } 

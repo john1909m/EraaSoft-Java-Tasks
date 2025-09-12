@@ -33,6 +33,9 @@ public class ItemController extends HttpServlet {
 
 	@Resource(name = "jdbc/item")
 	private DataSource dataSource;
+	
+	@Resource(name = "jdbc/item_details")
+	private DataSource detailDataSource;
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,11 +43,12 @@ public class ItemController extends HttpServlet {
 		if(session.getAttribute("currentUser")==null) {
 			response.sendRedirect("userController?action=showLogin");
 		}
-		
+
 		String action =request.getParameter("action");
 		if(Objects.isNull(action)) {
 			action="getItems";
 		}
+
 		switch(action) {
 			case "getItems":
 				getItems(request,response);
@@ -61,11 +65,75 @@ public class ItemController extends HttpServlet {
 			case "removeItem":
 				removeItem(request,response);
 				break;
-				
+			case "saveDetails":
+				saveDetails(request,response);
+				break;
+			case "showDetails":
+				showDetails(request,response);
+				break;
+			case "editDetails":
+				editDetails(request,response);
+				break;
+			case "removeDetails":
+				removeDetails(request,response);
+				break;
 			default:
 				getItems(request, response);
 				break;
 		}
+	}
+
+	private void showDetails(HttpServletRequest request, HttpServletResponse response) {
+		Long id=Long.parseLong(request.getParameter("item_id"));
+		Item item=new Item(id);
+		ItemService itemService=new ItemServiceImpl(detailDataSource);
+		String itemDetails=itemService.showDetails(id);
+		request.setAttribute("itemDetails", itemDetails);
+		request.setAttribute("itemId", id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("EditDetails.jsp");
+		try {
+			dispatcher.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void editDetails(HttpServletRequest request, HttpServletResponse response) {
+		Long id=Long.parseLong(request.getParameter("item_id"));
+		String name=request.getParameter("name");
+		Double price=Double.parseDouble(request.getParameter("price"));
+		int totalNumber=Integer.parseInt(request.getParameter("total_number"));
+		String itemDetails=request.getParameter("details");
+		Item item=new Item(id,name,price,totalNumber,itemDetails);
+		ItemService itemService=new ItemServiceImpl(detailDataSource);
+		boolean itemDetailsSaved=itemService.editDetails(item);
+		getItems(request, response);
+		
+	}
+
+	private void removeDetails(HttpServletRequest request, HttpServletResponse response) {
+		Long id=Long.parseLong(request.getParameter("id"));
+		ItemService itemService=new ItemServiceImpl(detailDataSource);
+		boolean isDetailsRemoved= itemService.removeDetails(id);
+		getItems(request, response);
+		
+	}
+
+	private void saveDetails(HttpServletRequest request, HttpServletResponse response) {
+		Long id=Long.parseLong(request.getParameter("item_id"));
+		String name=request.getParameter("name");
+		Double price=Double.parseDouble(request.getParameter("price"));
+		int totalNumber=Integer.parseInt(request.getParameter("total_number"));
+		String itemDetails=request.getParameter("details");
+		Item item=new Item(id,name,price,totalNumber,itemDetails);
+		ItemService itemService=new ItemServiceImpl(detailDataSource);
+		boolean itemDetailsSaved=itemService.saveDetails(item);
+		getItems(request, response);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -131,6 +199,9 @@ public class ItemController extends HttpServlet {
 		Long id=Long.parseLong(request.getParameter("id"));
 		ItemService itemService=new ItemServiceImpl(dataSource);
 		boolean isItemRemoved=itemService.removeItem(id);
+		if(!isItemRemoved) {
+			request.setAttribute("itemRemoved", id);
+		}
 		getItems(request, response);
 	}
 

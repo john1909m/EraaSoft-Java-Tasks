@@ -5,8 +5,11 @@ public class Item {
 	private String name;
 	private double price;
 	private int totalNumber;
+	private String details;
 	
-	
+	public Item(Long id) {
+		
+	}
 	public Item() {
 		
 	}
@@ -22,6 +25,13 @@ public class Item {
 		this.name = name;
 		this.price = price;
 		this.totalNumber = totalNumber;
+	}
+	public Item(long id, String name, double price, int totalNumber, String details) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.totalNumber = totalNumber;
+		this.details=details;
 	}
 	public long getId() {
 		return id;
@@ -46,6 +56,12 @@ public class Item {
 	}
 	public void setTotalNumber(int totalNumber) {
 		this.totalNumber = totalNumber;
+	}
+	public String getDetails() {
+		return details;
+	}
+	public void setDetails(String details) {
+		this.details = details;
 	}
 	
 	

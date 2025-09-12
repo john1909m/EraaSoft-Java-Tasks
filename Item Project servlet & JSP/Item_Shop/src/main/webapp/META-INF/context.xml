@@ -30,4 +30,15 @@
               maxTotal="20"
               maxIdle="10"
               maxWaitMillis="-1"/>
+
+             <Resource name="jdbc/item_details"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="hr"
+              password="hr"
+              driverClassName="oracle.jdbc.OracleDriver"
+              url="jdbc:oracle:thin:@//localhost:1521/orclpdb"
+              maxTotal="20"
+              maxIdle="10"
+              maxWaitMillis="-1"/>
 </Context>

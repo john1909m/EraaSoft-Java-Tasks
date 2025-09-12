@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,26 +88,43 @@
       <div class="form-group">
         <label for="first_name">First Name</label>
         <input type="text" id="first_name" name="first_name" required minlength="2" maxlength="50">
+        <%if(request.getAttribute("fNameError")!=null){ %>
+        <p><%=request.getAttribute("fNameError") %></p>
+        <% } %>
       </div>
 
       <div class="form-group">
         <label for="last_name">Last Name</label>
         <input type="text" id="last_name" name="last_name" required minlength="2" maxlength="50">
+      	<%if(request.getAttribute("lNameError")!=null){ %>
+        <p><%=request.getAttribute("lNameError") %></p>
+        <% } %>
       </div>
 
       <div class="form-group">
         <label for="phone_number">Phone Number</label>
         <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{11}" placeholder="e.g., 01234567890" required>
+        <%if(request.getAttribute("phoneError")!=null){ %>
+        <p><%=request.getAttribute("phoneError") %></p>
+        <% } %>
       </div>
 
       <div class="form-group">
         <label for="email">Email Address</label>
         <input type="email" id="email" name="email" required maxlength="255">
+        <%if(request.getAttribute("emailError")!=null){ %>
+        <p><%=request.getAttribute("emailError") %></p>
+        <% } if(request.getAttribute("emailExist")!=null){ %>
+        <p><%=request.getAttribute("emailExist") %></p>
+        <% } %>
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required minlength="6" maxlength="255">
+        <%if(request.getAttribute("passwordError")!=null){ %>
+        <p><%=request.getAttribute("passwordError") %></p>
+        <% } %>
       </div>
 
       <button type="submit">Register</button>
