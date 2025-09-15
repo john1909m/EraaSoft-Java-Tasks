@@ -1,11 +1,17 @@
 package com.servlet.model;
 
+import java.sql.Date;
+
 public class Item {
 	private long id;
 	private String name;
 	private double price;
 	private int totalNumber;
-	private String details;
+	private String desc;
+	private String brand;
+	private Date expirationDate;
+	private boolean hasDetails;
+	
 	
 	public Item(Long id) {
 		
@@ -26,12 +32,11 @@ public class Item {
 		this.price = price;
 		this.totalNumber = totalNumber;
 	}
-	public Item(long id, String name, double price, int totalNumber, String details) {
+	public Item(long id, String desc,String brand,Date expirationDate) {
 		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.totalNumber = totalNumber;
-		this.details=details;
+		this.desc=desc;
+		this.brand=brand;
+		this.expirationDate=expirationDate;
 	}
 	public long getId() {
 		return id;
@@ -57,12 +62,31 @@ public class Item {
 	public void setTotalNumber(int totalNumber) {
 		this.totalNumber = totalNumber;
 	}
-	public String getDetails() {
-		return details;
+	public String getDesc() {
+		return desc;
 	}
-	public void setDetails(String details) {
-		this.details = details;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
+	public String getBrand() {
+		return brand;
+	}
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	public boolean isHasDetails() {
+		return hasDetails;
+	}
+	public void setHasDetails(boolean hasDetails) {
+		this.hasDetails = hasDetails;
+	}
+
 	
 	
 }

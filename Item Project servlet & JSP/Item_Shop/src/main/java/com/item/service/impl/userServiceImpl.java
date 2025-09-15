@@ -85,4 +85,62 @@ public class userServiceImpl implements userService {
 		return false;
 	}
 
+	@Override
+	public boolean hasAccount(User user) {
+		System.out.println("------------enter service");
+		Connection connection=null;
+		String sql ="SELECT * FROM USERS WHERE first_name=? and last_name=? and email=?";
+		
+		try {
+			connection=dataSource.getConnection();
+			System.out.println(connection);
+
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ps.setString(1, user.getFirstName());
+			ps.setString(2, user.getLastName());
+			ps.setString(3, user.getEmail());
+			System.out.println("SQL: SELECT * FROM USERS WHERE first_name='" 
+					   + user.getFirstName() + "' AND last_name='" 
+					   + user.getLastName() + "' AND email='" 
+					   + user.getEmail() + "'");
+			ResultSet resultSet=ps.executeQuery();
+			boolean found = resultSet.next();
+			System.out.println("Found user? " + found);
+			return found;
+
+
+		} catch (Exception e) {
+			System.out.println("--------> " + e.getMessage());
+		}finally {
+			try {
+				if(connection != null) connection.close();
+			}catch(Exception e) {
+				System.out.println("--------> " + e.getMessage());
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteAccount(User user) {
+		Connection connection=null;
+		String sql ="DELETE USERS WHERE email=?";
+		try {
+			connection=dataSource.getConnection();
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ps.setString(1, user.getEmail());
+			return ps.executeUpdate()>0;
+		} catch (Exception e) {
+			System.out.println("--------> " + e.getMessage());
+		}finally {
+			try {
+				if(connection != null) connection.close();
+			}catch(Exception e) {
+				System.out.println("--------> " + e.getMessage());
+			}
+		}
+			
+		return false;
+	}
+
 }

@@ -3,12 +3,14 @@ package com.servlet.controller;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,9 +41,20 @@ public class ItemController extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session=request.getSession();
-		if(session.getAttribute("currentUser")==null) {
-			response.sendRedirect("userController?action=showLogin");
+		boolean isLoggedIn=false;
+		Cookie[] cookies=request.getCookies();
+		if(cookies != null) {
+			for(Cookie c:cookies) {
+				if ("isLoggedIn".equals(c.getName()) && "true".equals(c.getValue())) {
+		            isLoggedIn = true;
+		            break;
+		        }
+			}
+		}
+		HttpSession session = request.getSession(false);
+		if(!isLoggedIn && (session == null || session.getAttribute("currentUser") == null)) {
+		    response.sendRedirect("userController?action=showLogin");
+		    return;
 		}
 
 		String action =request.getParameter("action");
@@ -87,9 +100,10 @@ public class ItemController extends HttpServlet {
 		Long id=Long.parseLong(request.getParameter("item_id"));
 		Item item=new Item(id);
 		ItemService itemService=new ItemServiceImpl(detailDataSource);
-		String itemDetails=itemService.showDetails(id);
+		Item itemDetails=itemService.showDetails(id);
 		request.setAttribute("itemDetails", itemDetails);
-		request.setAttribute("itemId", id);
+//		request.setAttribute("itemId", id);
+		System.out.println("-----> Forwarding to EditDetails.jsp with ID=" + id);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("EditDetails.jsp");
 		try {
 			dispatcher.forward(request, response);
@@ -104,11 +118,11 @@ public class ItemController extends HttpServlet {
 
 	private void editDetails(HttpServletRequest request, HttpServletResponse response) {
 		Long id=Long.parseLong(request.getParameter("item_id"));
-		String name=request.getParameter("name");
-		Double price=Double.parseDouble(request.getParameter("price"));
-		int totalNumber=Integer.parseInt(request.getParameter("total_number"));
-		String itemDetails=request.getParameter("details");
-		Item item=new Item(id,name,price,totalNumber,itemDetails);
+		String desc=request.getParameter("desc");
+		String brand=request.getParameter("brand");
+		String expirationDateStr=request.getParameter("expiration_date");
+		java.sql.Date expirationDate = java.sql.Date.valueOf(expirationDateStr);
+		Item item=new Item(id,desc,brand,expirationDate);
 		ItemService itemService=new ItemServiceImpl(detailDataSource);
 		boolean itemDetailsSaved=itemService.editDetails(item);
 		getItems(request, response);
@@ -125,11 +139,11 @@ public class ItemController extends HttpServlet {
 
 	private void saveDetails(HttpServletRequest request, HttpServletResponse response) {
 		Long id=Long.parseLong(request.getParameter("item_id"));
-		String name=request.getParameter("name");
-		Double price=Double.parseDouble(request.getParameter("price"));
-		int totalNumber=Integer.parseInt(request.getParameter("total_number"));
-		String itemDetails=request.getParameter("details");
-		Item item=new Item(id,name,price,totalNumber,itemDetails);
+		String desc=request.getParameter("desc");
+		String brand=request.getParameter("brand");
+		String expirationDateStr=request.getParameter("expiration_date");
+		java.sql.Date expirationDate = java.sql.Date.valueOf(expirationDateStr);
+		Item item=new Item(id,desc,brand,expirationDate);
 		ItemService itemService=new ItemServiceImpl(detailDataSource);
 		boolean itemDetailsSaved=itemService.saveDetails(item);
 		getItems(request, response);
@@ -142,6 +156,9 @@ public class ItemController extends HttpServlet {
 	private void getItems(HttpServletRequest request, HttpServletResponse response){
 		ItemService itemService=new ItemServiceImpl(dataSource);
 		List<Item> items=itemService.getItems();
+		for (Item item : items) {
+			item.setHasDetails(itemService.hasDetails(item.getId()));	
+		}
 		request.setAttribute("allItems",items);
 		try {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("ShowItemsAll/ShowItems.jsp");

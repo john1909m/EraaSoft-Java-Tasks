@@ -160,7 +160,7 @@ form input[type="submit"]:hover {
           border-radius:6px; 
           text-decoration:none; 
           border:none;
-          transition:all 0.3s ease;
+          transition:all 0.2s ease;
 }
 .action_btn:hover{
 	filter:brightness(0.8);
@@ -185,6 +185,9 @@ form input[type="submit"]:hover {
 		background-color:#A04B00;
 	
 }
+.logout{
+	background-color:#A04B00;
+}
     	
     </style>
 </head>
@@ -193,8 +196,11 @@ form input[type="submit"]:hover {
     <h1>Items</h1>
 
     <%
+	    
         List<Item> items = (List<Item>) request.getAttribute("allItems");
     %>
+   <a href="/Item_Shop/userController?action=logout"><button class="action_btn logout">Logout</button></a>
+   <a href="/Item_Shop/userController?action=deleteAccount"><button class="action_btn logout">Delete Account</button></a>
 	<form action="/Item_Shop/ItemController?action=getItem" method="post">
 		<label>Search by ID</label>
 		<input type="number" placeholder="Enter ID" name="id">
@@ -223,10 +229,14 @@ form input[type="submit"]:hover {
                        <%
     					session.setAttribute("item_" + item.getId(), item);
 						%>
+						
                            <a href="./EditItem.jsp?id=<%= item.getId()%>"><button class="action_btn update">Update</button></a>
-
-							<a href="ItemDetails.jsp"><button class="action_btn add">Add Details</button></a>
+							<% if(item.isHasDetails()){ %>
 							<a href="/Item_Shop/ItemController?action=showDetails&item_id=<%= item.getId() %>"><button class="action_btn update_details">Update Details</button></a>
+							<% } else{ %>
+								<a href="ItemDetails.jsp" onclick="<% session.setAttribute("selectedItem", item); %>"><button class="action_btn add">Add Details</button></a>
+							<% } %>
+							
 							<a href="/Item_Shop/ItemController?action=removeDetails&id=<%= item.getId() %>"><button class="action_btn delete_details">Delete Details</button></a>
 
 							<div style="margin-top:10px; display:flex; flex-direction:column; align-items:center;">

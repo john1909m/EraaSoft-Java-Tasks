@@ -65,6 +65,7 @@
   </style>
 </head>
 <%
+
 	String id =request.getParameter("id");
 	Item item =(Item) session.getAttribute("item_"+id);
 %>

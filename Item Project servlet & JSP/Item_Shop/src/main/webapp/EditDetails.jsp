@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Add Item Details</title>
+    <title>Edit Item Details</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,14 +37,16 @@
             font-weight: bold;
             color: #555;
         }
-        textarea {
+        input, textarea {
             width: 100%;
-            height: 120px;
             padding: 10px 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
+        }
+        textarea {
+            height: 100px;
             resize: none;
         }
         button {
@@ -65,20 +67,49 @@
     </style>
 </head>
 <%
-	Item item =(Item) session.getAttribute("selectedItem");
+boolean isLoggedIn=false;
+Cookie[] cookies=request.getCookies();
+if(cookies != null) {
+	for(Cookie c:cookies) {
+		if ("isLoggedIn".equals(c.getName()) && "true".equals(c.getValue())) {
+            isLoggedIn = true;
+            break;
+        }
+	}
+}
+if(!isLoggedIn) {
+	response.sendRedirect("userController?action=showLogin");
+}
+session=request.getSession();
+if(session.getAttribute("currentUser")==null) {
+	response.sendRedirect("userController?action=showLogin");
+}
+    Item itemDetails = (Item) request.getAttribute("itemDetails"); 
+	String expDate = "";
+	if(itemDetails != null && itemDetails.getExpirationDate() != null){
+	    expDate = itemDetails.getExpirationDate().toString(); // ده بيرجع yyyy-MM-dd بالفعل
+	}
 %>
 <body>
     <div class="container">
-        <h2>Add Item Details</h2>
+        <h2>Edit Item Details</h2>
         <form action="ItemController?action=editDetails" method="post">
-            <input type="hidden" name="item_id" value="<%= item.getId() %>">
-            <input type="hidden" name="name" value="<%= item.getName() %>">
-            <input type="hidden" name="price" value="<%= item.getPrice() %>">
-            <input type="hidden" name="total_number" value="<%= item.getTotalNumber() %>">
+            
+            <input type="hidden" name="item_id" value="<%= itemDetails != null ? itemDetails.getId() : "" %>">
 
             <div class="form-group">
-                <label for="details">Item Details</label>
-                <textarea id="details" name="details" required maxlength="500">${itemDetails}</textarea>
+                <label for="desc">Description</label>
+                <textarea id="desc" name="desc" required maxlength="500"><%= itemDetails != null ? itemDetails.getDesc() : "" %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input id="brand" type="text" name="brand" value="<%= itemDetails != null ? itemDetails.getBrand() : "" %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="expiration_date">Expiration Date</label>
+                <input id="expiration_date" type="date" name="expiration_date" value="<%= expDate %>" required>
             </div>
 
             <button type="submit">Save Details</button>

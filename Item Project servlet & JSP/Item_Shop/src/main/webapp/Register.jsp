@@ -128,7 +128,7 @@
       </div>
 
       <button type="submit">Register</button>
-      <p class="note">Already have an account? <a href="./login.html">Login</a></p>
+      <p class="note">Already have an account? <a href="./login.jsp">Login</a></p>
     </form>
   </div>
 </body>

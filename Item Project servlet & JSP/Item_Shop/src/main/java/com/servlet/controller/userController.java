@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import javax.sql.DataSource;
 
 import com.item.service.userService;
 import com.item.service.impl.userServiceImpl;
+import com.servlet.model.Item;
 import com.servlet.model.User;
 
 /**
@@ -46,6 +48,19 @@ public class userController extends HttpServlet {
 				break;
 			case "showLogin":
 				showlogin(request,response);
+				break;
+			case "logout":
+				logout(request,response);
+				break;
+			case "forgetPassword" :
+				forgetPassword(request,response);
+				break;
+			case "deleteAccount":
+				deleteAccount(request,response);
+				break;
+			default :
+				showlogin(request,response);
+				break;
 		}
 		
 		
@@ -55,19 +70,137 @@ public class userController extends HttpServlet {
 		
 	}
 
-	private void showlogin(HttpServletRequest request, HttpServletResponse response) {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-        try {
-			dispatcher.forward(request, response);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void deleteAccount(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession(false);
+		if(session!=null) {
+			User currentUser= (User) session.getAttribute("currentUser");
+			if(currentUser!=null) {
+				userService userService = new userServiceImpl(dataSource);
+	            boolean deleted = userService.deleteAccount(currentUser);
+	            if (deleted) {
+	                session.invalidate();
+	                Cookie cookie = new Cookie("isLoggedIn", "");
+	                cookie.setMaxAge(0);
+	                response.addCookie(cookie);
+
+	                try {
+						response.sendRedirect("login.jsp");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                return;
+	            }else {
+	                request.setAttribute("error", "Failed to delete account.");
+	                RequestDispatcher rd = request.getRequestDispatcher("ItemController?action=getItems");
+	                try {
+						rd.forward(request, response);
+					} catch (ServletException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                return;
+	            }
+			}
+		}
+		try {
+			response.sendRedirect("login.jsp");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void forgetPassword(HttpServletRequest request, HttpServletResponse response) {
+		String email = request.getParameter("email");
+		String firstName = request.getParameter("firstName");
+	    String lastName = request.getParameter("lastName");
+	    
+
+	    User user = new User(firstName, lastName, email);
+	    System.out.println(user.getFirstName());
+	    System.out.println(user.getLastName());
+	    System.out.println(user.getEmail());
+	    userService userService = new userServiceImpl(dataSource);
+	    boolean hasAccount = userService.hasAccount(user);
+
+	    try {
+	        if (hasAccount) {
+	        	System.out.print(hasAccount);
+	            Cookie cookie = new Cookie("isLoggedIn", "true");
+	            cookie.setMaxAge(60 * 60 * 24);
+	            response.addCookie(cookie);
+
+	            HttpSession session = request.getSession();
+	            session.setAttribute("currentUser", user);
+
+	            response.sendRedirect("ItemController");
+	            return;
+	        } else {
+	            request.setAttribute("error", "Account doesn't exist");
+	            RequestDispatcher rd = request.getRequestDispatcher("forgetPassword.jsp");
+	            rd.forward(request, response);
+	            return;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+
+	private void logout(HttpServletRequest request, HttpServletResponse response) {
+		Cookie cookie=new Cookie("isLoggedIn", "");
+		cookie.setMaxAge(0);
+		cookie.setPath(request.getContextPath());
+		response.addCookie(cookie);
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+		    session.invalidate(); 
+		}
+		showlogin(request,response);
 		
 	}
+
+	private void showlogin(HttpServletRequest request, HttpServletResponse response) {
+	    boolean isLoggedIn = false;
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+	        for (Cookie c : cookies) {
+	            if ("isLoggedIn".equals(c.getName()) && "true".equals(c.getValue())) {
+	                isLoggedIn = true;
+	                try {
+	                    response.sendRedirect("ItemController?action=getItems");
+	                    return;
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	                break;
+	            }
+	        }
+	    }
+
+	    HttpSession session = request.getSession();
+	    if (session.getAttribute("currentUser") != null) {
+	        try {
+	            response.sendRedirect("ItemController?action=getItems");
+	            return; 
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+	    try {
+	        dispatcher.forward(request, response);
+	        return;
+	    } catch (ServletException | IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 	private void showRegister(HttpServletRequest request, HttpServletResponse response) {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
@@ -155,8 +288,11 @@ public class userController extends HttpServlet {
 		User isUserLoggedin=userService.login(user);
 		if(isUserLoggedin!=null) {
 			try {
+				Cookie cookie=new Cookie("isLoggedIn","true");
+				cookie.setMaxAge(60*60*24);
+				response.addCookie(cookie);
 				HttpSession session=request.getSession();
-				session.setAttribute("currentUser", user);
+				session.setAttribute("currentUser", isUserLoggedin);
 				response.sendRedirect("ItemController");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

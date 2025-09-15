@@ -2,6 +2,7 @@ package com.item.service.impl;
 
 import java.lang.Thread.State;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -193,11 +194,12 @@ public class ItemServiceImpl implements ItemService{
 	    PreparedStatement ps = null;
 	    try {
 	        connection = dataSource.getConnection();
-	        String sql = "INSERT INTO ITEM_DETAILS (item_id, details) VALUES (?, ?)";
+	        String sql = "INSERT INTO ITEM_DETAILS (item_id, description, brand,expiration_date) VALUES (?, ?,?,?)";
 	        ps = connection.prepareStatement(sql);
 	        ps.setLong(1, item.getId());
-	        ps.setString(2, item.getDetails());
-
+	        ps.setString(2, item.getDesc());
+	        ps.setString(3, item.getBrand());
+	        ps.setDate(4, item.getExpirationDate());
 	        return ps.executeUpdate()>0;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -210,6 +212,24 @@ public class ItemServiceImpl implements ItemService{
 	        }
 	    }
 	    return false;
+	}
+	@Override
+	public boolean hasDetails(Long id) {
+		Connection connection=null;
+		String sql = "SELECT COUNT(*) FROM ITEM_DETAILS WHERE ITEM_ID=?";
+		try {
+			connection=dataSource.getConnection();
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ps.setLong(1, id);
+			ResultSet resultSet=ps.executeQuery();
+			if(resultSet.next()) {
+				return resultSet.getInt(1)>0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	@Override
 	public boolean removeDetails(Long id) {
@@ -240,12 +260,14 @@ public class ItemServiceImpl implements ItemService{
 	public boolean editDetails(Item item) {
 		Connection connection=null;
 		try {
-			String sql="UPDATE ITEM_DETAILS SET details=? WHERE ITEM_ID=?";
+			String sql="UPDATE ITEM_DETAILS SET DESCRIPTION=?, bRAND=?, EXPIRATION_DATE=? WHERE ITEM_ID=?";
 			try {
 				connection=dataSource.getConnection();
 				PreparedStatement ps=connection.prepareStatement(sql);
-				ps.setString(1, item.getDetails());
-				ps.setLong(2, item.getId());
+				ps.setString(1, item.getDesc());
+				ps.setString(2, item.getBrand());
+				ps.setDate(3,  item.getExpirationDate());
+				ps.setLong(4, item.getId());
 				
 				return ps.executeUpdate()>0;
 			} catch (Exception e) {
@@ -263,22 +285,28 @@ public class ItemServiceImpl implements ItemService{
 		return false;
 	}
 	@Override
-	public String showDetails(Long id) {
+	public Item showDetails(Long id) {
 		Connection connection=null;
-		String details="";
+		Item item = null;
+		String desc="";
+		String brand="";
+		Date expirationDate=null;
 		try {
-			String sql="SELECT details FROM ITEM_DETAILS WHERE ITEM_ID=?";
+			String sql="SELECT description,brand,expiration_date FROM ITEM_DETAILS WHERE ITEM_ID=?";
 			try {
 				connection=dataSource.getConnection();
 				PreparedStatement ps=connection.prepareStatement(sql);
 				ps.setLong(1, id);
 				ResultSet resultSet=ps.executeQuery();
 				if(resultSet.next()) {
-					details=resultSet.getString("details");
+					desc=resultSet.getString("description");
+					brand=resultSet.getString("brand");
+					expirationDate=resultSet.getDate("expiration_date");
+					item = new Item(id, desc, brand, expirationDate);
 				}
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 		} catch (Exception e) {
 			System.out.println("--------> " + e.getMessage());
@@ -292,7 +320,7 @@ public class ItemServiceImpl implements ItemService{
 		}
 		
 		
-		return details;
+		return item ;
 	}
 
 	

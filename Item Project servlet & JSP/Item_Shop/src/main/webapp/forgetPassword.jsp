@@ -1,12 +1,10 @@
-<%@page import="com.item.service.userService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Login</title>
+  <title>Forget Password</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -74,39 +72,46 @@
       background: #0056b3;
     }
 
+    .error {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
     .note {
       text-align: center;
       font-size: 13px;
       margin-top: 10px;
       color: #666;
     }
-    .error{
-    	color:red;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Login</h2>
-    <%if(request.getAttribute("error")!=null){ %>
-    <p class="error"><%=request.getAttribute("error") %>
+    <h2>Forget Password</h2>
+
+    <% if(request.getAttribute("error") != null) { %>
+      <p class="error"><%= request.getAttribute("error") %></p>
     <% } %>
-    <form action="/Item_Shop/userController?action=login" method="post">
+
+    <form action="userController?action=forgetPassword" method="post">
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required maxlength="255">
+        <label>Email:</label>
+        <input type="email" name="email" required >
       </div>
 
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required minlength="6" maxlength="255">
-        <p class="note"><a href="./forgetPassword.jsp">Forget password</a></p>
-        
-        
+        <label>First Name:</label>
+        <input type="text" name="firstName" required>
       </div>
 
-      <button type="submit">Login</button>
-      <p class="note">Don't have an account? <a href="./Register.jsp">Register</a></p>
+      <div class="form-group">
+        <label>Last Name:</label>
+        <input type="text" name="lastName" required>
+      </div>
+
+      <button type="submit">Submit</button>
+      <p class="note"><a href="./login.jsp">Back to Login</a></p>
     </form>
   </div>
 </body>

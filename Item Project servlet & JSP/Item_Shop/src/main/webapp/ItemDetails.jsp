@@ -21,7 +21,7 @@
             padding: 25px 30px;
             border-radius: 12px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            width: 400px;
+            width: 420px;
         }
         h2 {
             text-align: center;
@@ -37,14 +37,16 @@
             font-weight: bold;
             color: #555;
         }
-        textarea {
+        input[type="text"], input[type="date"], textarea {
             width: 100%;
-            height: 120px;
             padding: 10px 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
+        }
+        textarea {
+            height: 100px;
             resize: none;
         }
         button {
@@ -73,14 +75,22 @@
         <form action="ItemController?action=saveDetails" method="post">
             <!-- hidden fields for item info -->
             <input type="hidden" name="item_id" value="<%= item.getId() %>">
-            <input type="hidden" name="name" value="<%= item.getName() %>">
-            <input type="hidden" name="price" value="<%= item.getPrice() %>">
-            <input type="hidden" name="total_number" value="<%= item.getTotalNumber() %>">
 
             <div class="form-group">
-                <label for="details">Item Details</label>
-                <textarea id="details" name="details" required maxlength="500"></textarea>
+                <label for="description">Description</label>
+                <textarea id="description" name="desc" required maxlength="500"></textarea>
             </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" required maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="expiration_date">Expiration Date</label>
+                <input type="date" id="expiration_date" name="expiration_date" required>
+            </div>
+
 
             <button type="submit">Save Details</button>
         </form>
