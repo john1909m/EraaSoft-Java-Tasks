@@ -182,11 +182,14 @@ form input[type="submit"]:hover {
 	color:black;
 }
 .delete_details{
-		background-color:#A04B00;
+	background-color:#A04B00;
 	
 }
 .logout{
 	background-color:#A04B00;
+}
+.delete_account{
+	background-color:#FF0000;
 }
     	
     </style>
@@ -200,7 +203,7 @@ form input[type="submit"]:hover {
         List<Item> items = (List<Item>) request.getAttribute("allItems");
     %>
    <a href="/Item_Shop/userController?action=logout"><button class="action_btn logout">Logout</button></a>
-   <a href="/Item_Shop/userController?action=deleteAccount"><button class="action_btn logout">Delete Account</button></a>
+   <a href="/Item_Shop/userController?action=deleteAccount"><button class="action_btn delete_account">Delete Account</button></a>
 	<form action="/Item_Shop/ItemController?action=getItem" method="post">
 		<label>Search by ID</label>
 		<input type="number" placeholder="Enter ID" name="id">
