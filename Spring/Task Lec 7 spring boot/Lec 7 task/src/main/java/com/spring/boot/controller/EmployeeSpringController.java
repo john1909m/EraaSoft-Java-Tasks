@@ -30,15 +30,37 @@ public class EmployeeSpringController {
 
     }
 
+    @PostMapping("/employee/add/list")
+    public EmployeeSpringDto addEmployees(@RequestBody List<EmployeeSpringDto> employeeSpringDtos) {
+        return (EmployeeSpringDto) employeeSpringService.addEmployees(employeeSpringDtos);
+
+    }
+
     @PutMapping("/employee/update")
     public EmployeeSpringDto updateEmployee(@RequestBody EmployeeSpringDto employeeSpringDto) {
         return employeeSpringService.updateEmployee(employeeSpringDto);
 
     }
+
+    @PutMapping("/employee/update/list")
+    public EmployeeSpringDto updateEmployees(@RequestBody List<EmployeeSpringDto> employeeSpringDtos) {
+        return (EmployeeSpringDto) employeeSpringService.updateEmployees(employeeSpringDtos);
+
+    }
+
+    @DeleteMapping("/employee/deleteAll")
+    public void deleteAll() {
+        employeeSpringService.deleteAllEmployees();
+    }
+
     @DeleteMapping("/employee/delete/{id}")
     public void deleteEmployee(@PathVariable Long id) {
         employeeSpringService.deleteEmployee(id);
 
+    }
+    @DeleteMapping("/employee/delete/list")
+    public void deleteEmployeesByIds(@RequestBody List<Long> ids) {
+        employeeSpringService.deleteEmployeesByIds(ids);
     }
 
     @GetMapping("/employee")

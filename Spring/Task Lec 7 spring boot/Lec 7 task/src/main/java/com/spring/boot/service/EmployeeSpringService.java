@@ -11,10 +11,19 @@ public interface EmployeeSpringService {
 
     EmployeeSpringDto addEmployee(EmployeeSpringDto teacher);
 
+    List<EmployeeSpringDto> addEmployees(List<EmployeeSpringDto> employees);
 
     EmployeeSpringDto updateEmployee(EmployeeSpringDto teacher);
 
+    List<EmployeeSpringDto> updateEmployees(List<EmployeeSpringDto> employees);
+
     void deleteEmployee(Long id);
+
+    void deleteAllEmployees();
+
+    void deleteEmployeesByIds(List<Long> ids);
+
+    List<EmployeeSpringDto> getEmployeesByIds(List<Long> ids);
 
     EmployeeSpringDto getEmployeeById(Long id);
 

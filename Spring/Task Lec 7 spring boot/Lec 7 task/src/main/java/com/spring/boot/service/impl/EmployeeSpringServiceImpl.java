@@ -49,8 +49,21 @@ public class EmployeeSpringServiceImpl implements EmployeeSpringService {
             throw new RuntimeException("teacher is already exist with same username");
         }
         EmployeeSpring employeeSpring = employeeSpringRepo.save(new EmployeeSpring(employeeSpringDto.getName(),employeeSpringDto.getAge(),employeeSpringDto.getPhoneNumber()));
+
         employeeSpringDto.setId(employeeSpring.getId());
+
         return employeeSpringDto;
+    }
+
+    @Override
+    public List<EmployeeSpringDto> addEmployees(List<EmployeeSpringDto> employees) {
+        List<EmployeeSpring> entities=employees.stream()
+                .map(employeeSpring ->new EmployeeSpring(employeeSpring.getName(),employeeSpring.getAge(),employeeSpring.getPhoneNumber()))
+                .collect(Collectors.toList());
+
+        return employeeSpringRepo.saveAll(entities).stream()
+                .map(employeeSpring ->new EmployeeSpringDto(employeeSpring.getId(), employeeSpring.getName(), employeeSpring.getAge(),employeeSpring.getPhoneNumber()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,12 +76,41 @@ public class EmployeeSpringServiceImpl implements EmployeeSpringService {
     }
 
     @Override
+    public List<EmployeeSpringDto> updateEmployees(List<EmployeeSpringDto> employees) {
+        List<EmployeeSpring> entities = employees.stream()
+                .map(e -> new EmployeeSpring(e.getId(), e.getName(), e.getAge(), e.getPhoneNumber()))
+                .collect(Collectors.toList());
+        return employeeSpringRepo.saveAll(entities)
+                .stream()
+                .map(e -> new EmployeeSpringDto(e.getId(), e.getName(), e.getAge(), e.getPhoneNumber()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteEmployee(Long id) {
         Optional<EmployeeSpring> employeeSpringOptional = employeeSpringRepo.findById(id);
         if(employeeSpringOptional.isEmpty()){
             throw new RuntimeException("employee not found");
         }
         employeeSpringRepo.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllEmployees() {
+        employeeSpringRepo.deleteAll();
+    }
+
+    @Override
+    public void deleteEmployeesByIds(List<Long> ids) {
+        employeeSpringRepo.deleteAllById(ids);
+    }
+
+    @Override
+    public List<EmployeeSpringDto> getEmployeesByIds(List<Long> ids) {
+        return employeeSpringRepo.findAllById(ids)
+                .stream()
+                .map(e -> new EmployeeSpringDto(e.getId(), e.getName(), e.getAge(), e.getPhoneNumber()))
+                .collect(Collectors.toList());
     }
 
     @Override
