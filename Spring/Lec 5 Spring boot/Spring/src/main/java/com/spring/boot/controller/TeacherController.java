@@ -1,6 +1,6 @@
 package com.spring.boot.controller;
 
-import com.spring.boot.model.Teacher;
+import com.spring.boot.dto.TeacherDto;
 import com.spring.boot.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class TeacherController {
 
@@ -19,32 +20,44 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers")
-    public List<Teacher> getTeachers() {
+    public List<TeacherDto> getTeachers() {
         return teacherService.getAllTeachers();
 
     }
 
     @PostMapping("/teacher/add")
-    public Teacher addTeacher(Teacher teacher) {
+    public TeacherDto addTeacher(@RequestBody TeacherDto teacher) {
         return teacherService.addTeacher(teacher);
 
     }
 
     @PutMapping("/teacher/update")
-    public Teacher updateTeacher(Teacher teacher) {
+    public TeacherDto updateTeacher(@RequestBody TeacherDto teacher) {
         return teacherService.updateTeacher(teacher);
 
     }
-
-    @DeleteMapping("/teacher/delete")
-    public void deleteTeacher(Long id) {
+    //method param
+//    @DeleteMapping("/teacher/delete")
+//    public void deleteTeacher(@RequestParam("t_id") Long id) {
+//        teacherService.deleteTeacher(id);
+//
+//    }
+    @DeleteMapping("/teacher/delete/{id}")
+    public void deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacher(id);
 
     }
 
     @GetMapping("/teacher")
-    public Teacher getTeacher(Long id) {
+    public TeacherDto getTeacher(@RequestParam Long id) {
         return teacherService.getTeacherById(id);
+
+    }
+
+
+    @GetMapping("/teacher/username")
+    public TeacherDto getTeacher(@RequestParam String username) {
+        return teacherService.getTeacherByUserName(username);
 
     }
 

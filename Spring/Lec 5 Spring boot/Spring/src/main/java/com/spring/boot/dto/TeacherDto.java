@@ -1,31 +1,29 @@
-package com.spring.boot.model;
+package com.spring.boot.dto;
 
 import jakarta.persistence.*;
 
-@Entity
-public class Teacher {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TeacherDto {
+
+
     private Long id;
 
-    @Column(unique = true, nullable = false)
+
     private String username;
 
-    @Column(nullable = false)
-    private String password;
-
-    public Teacher() {
-
-    }
-
-    public Teacher(String username, String password) {
+    public TeacherDto(Long id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
     }
 
-    public Teacher(Long id, String username, String password) {
-        this.id = id;
+    private String password;
+
+    public TeacherDto() {
+
+    }
+
+    public TeacherDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

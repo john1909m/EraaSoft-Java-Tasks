@@ -1,21 +1,24 @@
 package com.spring.boot.service;
 
-import com.spring.boot.model.Teacher;
+import com.spring.boot.dto.TeacherDto;
+
 
 import java.util.List;
 
 public interface TeacherService {
 
-    List<Teacher> getAllTeachers();
+    List<TeacherDto> getAllTeachers();
 
 
-    Teacher addTeacher(Teacher teacher);
+    TeacherDto addTeacher(TeacherDto teacher);
 
 
-    Teacher updateTeacher(Teacher teacher);
+    TeacherDto updateTeacher(TeacherDto teacher);
 
 
     void deleteTeacher(Long id);
 
-    Teacher getTeacherById(Long id);
+    TeacherDto getTeacherById(Long id);
+
+    TeacherDto getTeacherByUserName(String userName);
 }
