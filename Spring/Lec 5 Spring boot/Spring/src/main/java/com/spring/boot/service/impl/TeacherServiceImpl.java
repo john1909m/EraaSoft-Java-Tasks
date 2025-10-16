@@ -63,7 +63,7 @@ public class TeacherServiceImpl implements TeacherService {
     public void deleteTeacher(Long id) {
         Optional<Teacher> teacherOptional = teacherRepo.findById(id);
         if(teacherOptional.isEmpty()){
-            throw new RuntimeException("teacher.notExist");
+            throw new RuntimeException("teacher.notFound");
         }
         teacherRepo.deleteById(id);
     }
@@ -72,7 +72,7 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherDto getTeacherById(Long id) {
         Optional<Teacher> teacherOptional = teacherRepo.findById(id);
         if(teacherOptional.isEmpty()){
-            throw new RuntimeException("teacher.notExist");
+            throw new RuntimeException("teacher.notFound");
         }
         Teacher teacher =teacherOptional.get();
         return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());
@@ -82,7 +82,7 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherDto getTeacherByUserName(String userName) {
         Optional<Teacher> teacherOptional = teacherRepo.findByusername(userName);
         if(teacherOptional.isEmpty()){
-            throw new RuntimeException("teacher.notExist");
+            throw new RuntimeException("teacher.notFound");
         }
         Teacher teacher =teacherOptional.get();
         return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());

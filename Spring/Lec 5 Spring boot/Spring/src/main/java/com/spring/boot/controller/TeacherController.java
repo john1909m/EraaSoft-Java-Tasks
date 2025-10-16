@@ -60,8 +60,8 @@ public class TeacherController {
     }
 
 
-    @GetMapping("/teacher/username")
-    public ResponseEntity<TeacherDto> getTeacher(@RequestParam String username) {
+    @GetMapping("/teacher/{username}")
+    public ResponseEntity<TeacherDto> getTeacher(@PathVariable String username) {
         return ResponseEntity.ok(teacherService.getTeacherByUserName(username));
 
     }
