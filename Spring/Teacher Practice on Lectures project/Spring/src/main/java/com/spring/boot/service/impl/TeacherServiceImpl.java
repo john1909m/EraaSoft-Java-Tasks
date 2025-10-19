@@ -1,8 +1,10 @@
 package com.spring.boot.service.impl;
+import com.spring.boot.Mapper.TeacherMapper;
 import com.spring.boot.dto.TeacherDto;
 import com.spring.boot.model.Teacher;
 import com.spring.boot.repo.TeacherRepo;
 import com.spring.boot.service.TeacherService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,21 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
 
     TeacherRepo teacherRepo;
+    private TeacherMapper teacherMapper;
+
+
 
     @Autowired
-    public TeacherServiceImpl(TeacherRepo teacherRepo) {
+    public TeacherServiceImpl(TeacherRepo teacherRepo, TeacherMapper teacherMapper) {
         this.teacherRepo = teacherRepo;
+        this.teacherMapper = teacherMapper;
     }
 
     @Override
     public List<TeacherDto> getAllTeachers() {
         List<Teacher> teachers = teacherRepo.findAll();
         return teachers.stream().map(teacher ->
-                new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword()))
+                teacherMapper.toDto(teacher))
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
         if(teacherOptional.isPresent()){
             throw new RuntimeException("teacher.exist");
         }
-        Teacher teacher = teacherRepo.save(new Teacher(teacherDto.getUsername(),teacherDto.getPassword()));
+        Teacher teacher = teacherRepo.save(teacherMapper.toEntity(teacherDto));
         teacherDto.setId(teacher.getId());
         return teacherDto;
     }
@@ -54,7 +60,7 @@ public class TeacherServiceImpl implements TeacherService {
         if(Objects.isNull(teacherDto.getId())){
             throw new RuntimeException("id.teacher.Required");
         }
-        Teacher teacher = teacherRepo.save(new Teacher(teacherDto.getId(),teacherDto.getUsername(),teacherDto.getPassword()));
+        teacherRepo.save(teacherMapper.toEntity(teacherDto));
         return teacherDto;
 
     }
@@ -75,7 +81,8 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("teacher.notFound");
         }
         Teacher teacher =teacherOptional.get();
-        return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());
+//        return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());
+        return teacherMapper.toDto(teacher);
     }
 
     @Override
@@ -85,6 +92,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new RuntimeException("teacher.notFound");
         }
         Teacher teacher =teacherOptional.get();
-        return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());
+//        return new TeacherDto(teacher.getId(), teacher.getUsername(), teacher.getPassword());
+        return teacherMapper.toDto(teacher);
     }
 }

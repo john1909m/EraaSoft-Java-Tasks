@@ -40,12 +40,7 @@ public class TeacherController {
         return ResponseEntity.ok(teacherService.updateTeacher(teacher));
 
     }
-    //method param
-//    @DeleteMapping("/teacher/delete")
-//    public void deleteTeacher(@RequestParam("t_id") Long id) {
-//        teacherService.deleteTeacher(id);
-//
-//    }
+
     @DeleteMapping("/teacher/delete/{id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacher(id);
