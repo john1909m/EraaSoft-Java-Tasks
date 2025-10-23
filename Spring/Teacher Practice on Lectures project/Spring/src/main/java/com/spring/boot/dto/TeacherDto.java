@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,6 +25,8 @@ public class TeacherDto {
 
     @NotBlank(message = "password.teacher.required")
     private String password;
+
+    private List<RoleDto> roles;
 
 
 }

@@ -13,20 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Teacher {
-
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private String code;
 
 
+    @ManyToMany
+    private List<Teacher> teachers;
 }

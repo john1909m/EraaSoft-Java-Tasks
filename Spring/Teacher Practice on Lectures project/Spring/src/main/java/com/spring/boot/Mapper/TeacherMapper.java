@@ -15,7 +15,7 @@ public interface TeacherMapper {
 
     Teacher toEntity(TeacherDto teacherDto);
 
-    @Mapping(target="password",ignore = true)
+//    @Mapping(target="password",ignore = true)
     TeacherDto toDto(Teacher teacher);
     List<Teacher> toEntityList(List<TeacherDto> teacherDtoList);
     List<TeacherDto> toDtoList(List<Teacher> teachers);

@@ -5,6 +5,7 @@ import com.spring.boot.service.TeacherService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<TeacherDto>> getTeachers() {
         return ResponseEntity.ok(teacherService.getAllTeachers());
 
@@ -56,6 +58,7 @@ public class TeacherController {
 
 
     @GetMapping("/teacher/{username}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<TeacherDto> getTeacher(@PathVariable String username) {
         return ResponseEntity.ok(teacherService.getTeacherByUserName(username));
 

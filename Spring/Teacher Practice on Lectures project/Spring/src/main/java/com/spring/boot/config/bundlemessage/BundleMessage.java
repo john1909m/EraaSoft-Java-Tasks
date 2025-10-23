@@ -1,12 +1,9 @@
-package com.spring.boot.config;
+package com.spring.boot.config.bundlemessage;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.stereotype.Component;
-
-import java.util.ResourceBundle;
 
 @Configuration
 public class BundleMessage {

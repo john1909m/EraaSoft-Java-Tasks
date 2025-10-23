@@ -1,4 +1,4 @@
-package com.spring.boot.config;
+package com.spring.boot.config.exception;
 
 import com.spring.boot.helper.MessageResponse;
 import com.spring.boot.service.impl.BundleMessageService;
