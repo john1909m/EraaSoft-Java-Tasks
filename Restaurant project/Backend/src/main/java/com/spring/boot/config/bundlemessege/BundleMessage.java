@@ -1,0 +1,22 @@
+package com.spring.boot.config.bundlemessege;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
+public class BundleMessage {
+
+    @Value("i18n/messages")
+    private String baseName;
+
+    @Bean
+    public ResourceBundleMessageSource messageSource(){
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasenames(baseName);
+        source.setDefaultEncoding("UTF-8");
+        return source;
+    }
+
+
+
+}
